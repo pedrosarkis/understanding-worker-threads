@@ -7,5 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bunyan": "^1.8.14",
+    "express": "^4.17.1",
+    "fibonacci": "^1.6.7",
+    "worker-threads-pool": "^2.0.0"
+  }
 }
