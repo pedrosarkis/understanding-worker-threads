@@ -30,6 +30,7 @@ router.get('/fibonacciThreadedWithouPromise', async (req, res) => {
 });
 
 
+//Aqui faz a chamada pra uma mesma função que cria worker threads porém mais "inteligente" limitando a cpu
 router.get('/fibonacciThreadedPool', async (req, res) => {
   runFibonacciPool({ iterations: 10000 }).then(result => log.info(result));
   res.send('processing');
