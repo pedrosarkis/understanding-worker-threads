@@ -1,8 +1,20 @@
 const fb = require('fibonacci');
 const { isMainThread, parentPort, workerData } = require('worker_threads');
 const Pool = require('worker-threads-pool');
+
+//Ele pega a quantidade de núcleos que tem no sistema operacional que está executando a pool
+//No caso do meu pc, 12
 const CPUs = require('os').cpus().length;
+
+//Limita a quantidade de cpu da pool a quantidade de cpu que possui no SO
+//Isso é útil para não travar a máquina em várias chamadas seguidas do mesmo serviço 
+//Em um cenário onde não usa limite de cpu, se o usuário fizer o request 200x 
+//Vai criando worker simultaneas e a memória /cpu acaba 
+//Com limite de cpu ele espera 1 cpu liberar,pra dai então criar outra pool
+//Enquanto isso elas ficam numa espécie de fila
 const pool = new Pool({ max: CPUs });
+
+console.log(pool);
 
 const runFibonacci = workerData => {
   return new Promise((resolve, reject) => {
