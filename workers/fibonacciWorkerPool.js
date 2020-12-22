@@ -1,10 +1,14 @@
 const fb = require('fibonacci');
 const { isMainThread, parentPort, workerData } = require('worker_threads');
+
+//Instanciando uma nova pool
 const Pool = require('worker-threads-pool');
 
-//Ele pega a quantidade de núcleos que tem no sistema operacional que está executando a pool
-//No caso do meu pc, 12
+
+
+//Pegando a quantidade de CPU do Sistema operacional
 const CPUs = require('os').cpus().length;
+
 
 //Limita a quantidade de cpu da pool a quantidade de cpu que possui no SO
 //Isso é útil para não travar a máquina em várias chamadas seguidas do mesmo serviço 
@@ -14,10 +18,10 @@ const CPUs = require('os').cpus().length;
 //Enquanto isso elas ficam numa espécie de fila
 const pool = new Pool({ max: CPUs });
 
-console.log(pool);
 
 const runFibonacci = workerData => {
   return new Promise((resolve, reject) => {
+    //Pool.acquire fica em volta do worker, ele que inicia o worker internamente, e a assinatura da function é a mesma.
     pool.acquire(__filename, { workerData }, (err, worker) => {
       if (err) reject(err);
       console.log(`started worker ${worker} (pool size: ${pool.size})`);
@@ -29,6 +33,8 @@ const runFibonacci = workerData => {
     });
   });
 };
+
+//A única grande vantagem da pool é limitar a quantidade de threads limitadas a cpu, é basicamente necessário sempre fazer um pool, para performance e segurança.
 
 /**
  * If it's not the main thread it's one of the Worker threads
