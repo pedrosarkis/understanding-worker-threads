@@ -36,12 +36,19 @@ router.get('/fibonacciThreadedPool', async (req, res) => {
   res.send('processing');
 });
 
+
 router.get('/fibonacciThreadedShared', async (req, res) => {
   /**
    * Uses shared SharedArrayBuffer to share data with the workers
    */
+  //Iniciando um sharedArrayBuffer de 8 bits
+  //Se não usar shared array ele vai dar empty positions pras primeiras posicoes do array a cada iteracao de chamada de worker. 
   const sharedUint8Array = new Uint8Array(new SharedArrayBuffer(4));
+
+  //Chamando 4 threads, onde o retorno delas é adicionado no array 
   for (let i = 0; i < 4; i++) {
+    //Esse sharedUint8Array não é copiado como objeto ao passar parametro, ele é compartilhado na memória entre todas os workers.
+    //
     runFibonacciShared({ iterations: 1000, position: i, arr: sharedUint8Array }).then(result => console.log(result));
   }
   res.send('processing');
